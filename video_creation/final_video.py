@@ -4,6 +4,7 @@ import os
 import re
 from os.path import exists
 
+from moviepy.audio.fx.audio_fadeout import audio_fadeout
 from moviepy.editor import (
     VideoFileClip,
     AudioFileClip,
@@ -46,7 +47,8 @@ def make_final_video(number_of_clips: int, length: int, reddit_obj: dict[str]):
     # Gather all audio clips
     audio_clips = []
     for i in range(0, number_of_clips):
-        audio_clips.append(AudioFileClip(f"assets/temp/mp3/{i}.mp3"))
+        audio_clips.append(AudioFileClip(f"assets/temp/mp3/{i}.mp3").fx(audio_fadeout, 0.05))
+
     audio_clips.insert(0, AudioFileClip("assets/temp/mp3/title.mp3"))
     audio_concat = concatenate_audioclips(audio_clips)
     audio_composite = CompositeAudioClip([audio_concat])
@@ -125,6 +127,7 @@ def make_final_video(number_of_clips: int, length: int, reddit_obj: dict[str]):
         fps=30,
         audio_codec="aac",
         audio_bitrate="192k",
+        codec='h264_nvenc',
         verbose=False,
         threads=multiprocessing.cpu_count(),
     )
