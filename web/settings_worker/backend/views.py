@@ -10,7 +10,7 @@ def get(request):
     with open('../../.env', 'r') as file:
         for line in file.read().splitlines():
             data = line.split('=')
-            response[data[0].lower()] = data[1][1:-1]
+            response[data[0].lower()] = data[1].replace('"', '')
         return Response(response)
 
 
